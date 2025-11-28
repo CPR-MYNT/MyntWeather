@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -25,20 +27,48 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.perennial.weather.R
+import com.perennial.weather.ui.home.HomeViewModel
 import com.perennial.weather.ui.navigation.AppNavGraph
+import com.perennial.weather.utils.AppLocationManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
+import kotlin.getValue
 
 @AndroidEntryPoint
 class SplashActivity : ComponentActivity() {
+
+    private lateinit var locationManager: AppLocationManager
+    private val homeViewModel: HomeViewModel by viewModels()
+
+    private val permissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
+            val granted = result.values.any { it }
+            if (granted) getLocation() else homeViewModel.updateError("Permission Denied")
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        locationManager = AppLocationManager(this, permissionLauncher)
+
         setContent {
             val navHostController = rememberNavController()
             AppNavGraph(navHostController = navHostController)
         }
     }
+
+    private fun getLocation() {
+        locationManager.getCurrentLocation(
+            onSuccess = { lat, lon ->
+                homeViewModel.updateLocation(lat, lon)
+            },
+            onFailure = {
+                homeViewModel.updateError(it)
+            }
+        )
+    }
+
 }
 
 @Composable

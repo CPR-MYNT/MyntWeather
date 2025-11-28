@@ -1,7 +1,6 @@
 package com.perennial.weather.ui.auth.login
 
 
-import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -77,7 +76,8 @@ fun LoginScreen(
         LoginButton(
             navController = navController,
             loginViewModel = loginViewModel,
-            isLoading = isLoading
+            isLoading = isLoading,
+            navigateToHome = navigateToHome
         )
 
         AppSpacer(20.dp)
@@ -131,13 +131,13 @@ fun EditTextFields(
 fun LoginButton(
     navController: NavHostController,
     loginViewModel: LoginViewModel,
-    isLoading : Boolean){
+    isLoading : Boolean,
+    navigateToHome: () -> Unit){
     Button(
         onClick = {
             loginViewModel.onLoginClick(navController = navController,
                 onSuccess = {
-                    Toast.makeText(navController.context, "Login Success", Toast.LENGTH_SHORT).show()
-                    //navigateToHome()
+                    navigateToHome()
                 }
             )},
         modifier = Modifier

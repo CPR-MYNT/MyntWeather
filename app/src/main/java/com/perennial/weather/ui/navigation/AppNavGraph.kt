@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.perennial.weather.ui.auth.login.LoginScreen
 import com.perennial.weather.ui.auth.register.RegisterScreen
+import com.perennial.weather.ui.home.HomeScreen
 import com.perennial.weather.ui.splash.SplashScreen
 
 @Composable
@@ -50,6 +51,7 @@ fun AppNavGraph(navHostController: NavHostController) {
         }
 
         composable(Route.Home.route){
+            HomeScreen()
         }
     }
 }

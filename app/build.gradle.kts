@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -18,6 +20,12 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
+        val localProps = project.rootProject.file("local.properties")
+        val properties = Properties()
+        properties.load(localProps.inputStream())
+        val apiKey = properties.getProperty("OPEN_WEATHER_API_KEY") ?: ""
+
+        buildConfigField("String", "OPEN_WEATHER_API_KEY", "\"$apiKey\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -40,6 +48,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -72,4 +81,10 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.compose)
+
+    implementation(libs.play.services.location)
+
+    implementation("io.coil-kt:coil-compose:2.5.0")
+
+    implementation("androidx.security:security-crypto:1.1.0-alpha06")
 }

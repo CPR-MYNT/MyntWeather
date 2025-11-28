@@ -30,4 +30,8 @@ object DatabaseModule {
     @Provides
     fun provideUserDao(database: WeatherDatabase) = database.userDao()
 
+    @Singleton
+    @Provides
+    fun provideWeatherDao(database: WeatherDatabase) = database.weatherDao()
+
 }

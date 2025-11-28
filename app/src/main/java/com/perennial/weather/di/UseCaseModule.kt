@@ -1,6 +1,9 @@
 package com.perennial.weather.di
 
 import com.perennial.weather.domain.repository.AuthRepository
+import com.perennial.weather.domain.repository.WeatherRepository
+import com.perennial.weather.domain.usecase.GetCurrentWeatherUseCase
+import com.perennial.weather.domain.usecase.GetWeatherHistoryUseCase
 import com.perennial.weather.domain.usecase.LoginUseCase
 import com.perennial.weather.domain.usecase.RegisterUseCase
 import dagger.Module
@@ -23,6 +26,22 @@ object UseCaseModule {
     @Singleton
     fun provideRegisterUseCase(authRepository: AuthRepository): RegisterUseCase {
         return RegisterUseCase(authRepository = authRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetCurrentWeatherUseCase(
+        repository: WeatherRepository
+    ): GetCurrentWeatherUseCase {
+        return GetCurrentWeatherUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetWeatherHistoryUseCase(
+        repository: WeatherRepository
+    ): GetWeatherHistoryUseCase {
+        return GetWeatherHistoryUseCase(repository)
     }
 }
 

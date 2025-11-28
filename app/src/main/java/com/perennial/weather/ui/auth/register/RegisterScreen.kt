@@ -4,7 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,6 +30,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.perennial.weather.R
+import com.perennial.weather.domain.model.FieldError
+import com.perennial.weather.domain.model.FormField
+import com.perennial.weather.ui.components.AppSpacer
 import com.perennial.weather.ui.navigation.Route
 
 @Composable
@@ -44,7 +46,7 @@ fun RegisterScreen(
     val password by registerViewModel.password.collectAsState()
     val confirmPassword by registerViewModel.confirmPassword.collectAsState()
     val isLoading by registerViewModel.isLoading.collectAsState()
-    val message by registerViewModel.message.collectAsState()
+    val fieldError by registerViewModel.fieldError.collectAsState()
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -60,110 +62,147 @@ fun RegisterScreen(
             style = MaterialTheme.typography.headlineMedium
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
-
-        OutlinedTextField(
-            value = name,
-            onValueChange = {registerViewModel.onNameChange(it)},
-            label = {Text(navHostController.context.resources.getString(R.string.name))},
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next)
+        EditTextFields(
+            name = name,
+            email = email,
+            password = password,
+            confirmPassword = confirmPassword,
+            fieldError = fieldError,
+            navHostController = navHostController,
+            registerViewModel = registerViewModel
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        AppSpacer(20.dp)
 
-        OutlinedTextField(
-            value = email,
-            onValueChange = {registerViewModel.onEmailChange(it)},
-            label = {Text(navHostController.context.resources.getString(R.string.email))},
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Email,
-                imeAction = ImeAction.Next)
+        RegisterButton(
+            navHostController = navHostController,
+            registerViewModel = registerViewModel,
+            isLoading = isLoading
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        AppSpacer(20.dp)
 
-        OutlinedTextField(
-            value = password,
-            onValueChange = {registerViewModel.onPasswordChange(it)},
-            label = {Text(navHostController.context.resources.getString(R.string.password))},
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth(),
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Next)
-        )
+        AlreadyHaveAccount(navHostController = navHostController)
+    }
+}
 
-        Spacer(modifier = Modifier.height(16.dp))
+@Composable
+fun EditTextFields(
+    name: String,
+    email: String,
+    password: String,
+    confirmPassword: String,
+    fieldError: FieldError?,
+    navHostController: NavHostController,
+    registerViewModel: RegisterViewModel
+){
+    AppSpacer(32.dp)
 
-        OutlinedTextField(
-            value = confirmPassword,
-            onValueChange = {registerViewModel.onConfirmPasswordChange(it)},
-            label = {Text(navHostController.context.resources.getString(R.string.confirm_password))},
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth(),
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Done)
-        )
+    OutlinedTextField(
+        value = name,
+        onValueChange = {registerViewModel.onNameChange(it)},
+        label = {Text(navHostController.context.resources.getString(R.string.name))},
+        singleLine = true,
+        modifier = Modifier.fillMaxWidth(),
+        isError = fieldError?.field == FormField.NAME,
+        supportingText = if (fieldError?.field == FormField.NAME) { { Text(fieldError.message) } } else null,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Text,
+            imeAction = ImeAction.Next)
+    )
 
-        Spacer(modifier = Modifier.height(20.dp))
+    AppSpacer(16.dp)
 
-        Button(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(52.dp),
-            onClick = {registerViewModel.onRegisterClick(
-                navHostController = navHostController,
-                onSuccess = {
-                    navHostController.navigate(Route.Login.route){
-                        popUpTo(Route.Register.route){
-                            inclusive = true
-                        }
+    OutlinedTextField(
+        value = email,
+        onValueChange = {registerViewModel.onEmailChange(it)},
+        label = {Text(navHostController.context.resources.getString(R.string.email))},
+        singleLine = true,
+        modifier = Modifier.fillMaxWidth(),
+        isError = fieldError?.field == FormField.EMAIL,
+        supportingText = if (fieldError?.field == FormField.EMAIL) { { Text(fieldError.message) } } else null,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Email,
+            imeAction = ImeAction.Next)
+    )
+
+    AppSpacer(16.dp)
+
+    OutlinedTextField(
+        value = password,
+        onValueChange = {registerViewModel.onPasswordChange(it)},
+        label = {Text(navHostController.context.resources.getString(R.string.password))},
+        singleLine = true,
+        modifier = Modifier.fillMaxWidth(),
+        isError = fieldError?.field == FormField.PASSWORD,
+        supportingText = if (fieldError?.field == FormField.PASSWORD) { { Text(fieldError.message) } } else null,
+        visualTransformation = PasswordVisualTransformation(),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Password,
+            imeAction = ImeAction.Next)
+    )
+
+    AppSpacer(16.dp)
+
+    OutlinedTextField(
+        value = confirmPassword,
+        onValueChange = {registerViewModel.onConfirmPasswordChange(it)},
+        label = {Text(navHostController.context.resources.getString(R.string.confirm_password))},
+        singleLine = true,
+        modifier = Modifier.fillMaxWidth(),
+        isError = fieldError?.field == FormField.CONFIRM_PASSWORD,
+        supportingText = if (fieldError?.field == FormField.CONFIRM_PASSWORD) { { Text(fieldError.message) } } else null,
+        visualTransformation = PasswordVisualTransformation(),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Password,
+            imeAction = ImeAction.Done)
+    )
+}
+
+@Composable
+fun RegisterButton(navHostController: NavHostController, registerViewModel: RegisterViewModel, isLoading: Boolean){
+    Button(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(52.dp),
+        onClick = {registerViewModel.onRegisterClick(
+            navHostController = navHostController,
+            onSuccess = {
+                navHostController.navigate(Route.Login.route){
+                    popUpTo(Route.Register.route){
+                        inclusive = true
                     }
                 }
-            ) },
+            }
+        ) },
 
         ) {
-            if (isLoading){
-                CircularProgressIndicator(
-                    modifier = Modifier.size(20.dp),
-                    strokeWidth = 2.dp)
-            }
-            else{
-                Text(navHostController.context.resources.getString(R.string.register))
-            }
+        if (isLoading){
+            CircularProgressIndicator(
+                modifier = Modifier.size(20.dp),
+                strokeWidth = 2.dp)
         }
+        else{
+            Text(navHostController.context.resources.getString(R.string.register))
+        }
+    }
+}
+@Composable
+fun AlreadyHaveAccount(navHostController: NavHostController){
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Text(text = "${navHostController.context.resources.getString(R.string.already_have_account)} ")
 
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Text(text = "${navHostController.context.resources.getString(R.string.already_have_account)} ")
-
-            Text(
-                text = navHostController.context.resources.getString(R.string.login),
-                color = Color.Blue,
-                modifier = Modifier.clickable{
-                    navHostController.navigate(Route.Login.route){
-                        popUpTo(Route.Login.route) { inclusive = true }
-                    }
+        Text(
+            text = navHostController.context.resources.getString(R.string.login),
+            color = Color.Blue,
+            modifier = Modifier.clickable{
+                navHostController.navigate(Route.Login.route){
+                    popUpTo(Route.Login.route) { inclusive = true }
                 }
-            )
-        }
-
-        if (message.isNotEmpty()){
-            Spacer(modifier = Modifier.height(20.dp))
-            Text(text = message, color = MaterialTheme.colorScheme.error)
-        }
+            }
+        )
     }
 }

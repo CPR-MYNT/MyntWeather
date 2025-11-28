@@ -1,27 +1,22 @@
 package com.perennial.weather.domain.usecase
 
+import com.perennial.weather.R
+import com.perennial.weather.domain.model.AuthError
+import com.perennial.weather.domain.model.Result
 import com.perennial.weather.domain.repository.AuthRepository
-import com.perennial.weather.utils.Utils
+import com.perennial.weather.utils.AuthValidator
 
 class LoginUseCase(
     private val authRepository: AuthRepository
 ) {
     suspend operator fun invoke(email: String, password: String): Result<Boolean> {
         return try {
-            if (email.isBlank()) {
-                return Result.Error(AuthError.EmptyEmail)
+            AuthValidator.validateEmail(email)?.let {
+                return Result.Error(it)
             }
             
-            if (!Utils.isValidEmail(email)) {
-                return Result.Error(AuthError.InvalidEmail)
-            }
-            
-            if (password.isBlank()) {
-                return Result.Error(AuthError.EmptyPassword)
-            }
-            
-            if (password.length !in 8..16) {
-                return Result.Error(AuthError.InvalidPassword)
+            AuthValidator.validatePassword(password)?.let {
+                return Result.Error(it)
             }
             
             val success = authRepository.login(email = email.trim(), password = password.trim())
@@ -29,10 +24,10 @@ class LoginUseCase(
             if (success) {
                 Result.Success(true)
             } else {
-                Result.Error(AuthError.InvalidCredentials)
+                Result.Error(AuthError(R.string.invalid_credentials))
             }
         } catch (e: Exception) {
-            Result.Error(AuthError.UnknownError(e.message))
+            Result.Error(AuthError(R.string.error_occurred, e.message))
         }
     }
 }

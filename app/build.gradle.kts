@@ -24,8 +24,10 @@ android {
         val properties = Properties()
         properties.load(localProps.inputStream())
         val apiKey = properties.getProperty("OPEN_WEATHER_API_KEY") ?: ""
+        val sqlCipherKey = properties.getProperty("MASTER_KEY_SQL_CIPHER") ?: ""
 
         buildConfigField("String", "OPEN_WEATHER_API_KEY", "\"$apiKey\"")
+        buildConfigField("String", "MASTER_KEY_SQL_CIPHER", "\"$sqlCipherKey\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -84,7 +86,18 @@ dependencies {
 
     implementation(libs.play.services.location)
 
-    implementation("io.coil-kt:coil-compose:2.5.0")
+    implementation(libs.coil.compose)
 
-    implementation("androidx.security:security-crypto:1.1.0-alpha06")
+    implementation(libs.androidx.security.crypto)
+
+    implementation(libs.android.database.sqlcipher)
+    implementation(libs.androidx.sqlite.ktx)
+
+    testImplementation("org.mockito:mockito-core:5.11.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
+    testImplementation("androidx.test:core:1.6.0")
+    testImplementation("androidx.test.ext:junit:1.2.1")
+    testImplementation("app.cash.turbine:turbine:1.1.0")
 }

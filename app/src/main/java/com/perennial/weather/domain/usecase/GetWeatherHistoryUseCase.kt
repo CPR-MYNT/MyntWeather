@@ -8,8 +8,8 @@ import javax.inject.Inject
 class GetWeatherHistoryUseCase @Inject constructor(
     private val repository: WeatherRepository
 ) {
-    operator fun invoke(): Flow<List<WeatherEntity>> {
-        return repository.getWeatherHistory()
+    operator fun invoke(email: String): Flow<List<WeatherEntity>> {
+        return repository.getWeatherHistoryByEmail(email)
     }
 }
 

@@ -13,5 +13,6 @@ data class WeatherEntity(
     val sunset: Long,
     val condition: String,
     val icon: String,
-    val createdAt: Long
+    val createdAt: Long,
+    val userEmail: String
 )

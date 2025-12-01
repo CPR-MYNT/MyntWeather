@@ -8,6 +8,7 @@ import com.perennial.weather.domain.model.Result
 import com.perennial.weather.domain.usecase.LoginUseCase
 import com.perennial.weather.domain.model.FieldError
 import com.perennial.weather.domain.model.FormField
+import com.perennial.weather.utils.UserPreferencesManager
 import com.perennial.weather.utils.getMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +18,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val loginUseCase: LoginUseCase): ViewModel() {
+class LoginViewModel @Inject constructor(
+    private val loginUseCase: LoginUseCase,
+    private val userPreferencesManager: UserPreferencesManager
+): ViewModel() {
     private val _email = MutableStateFlow("")
     val email: StateFlow<String> = _email.asStateFlow()
 
@@ -51,6 +55,7 @@ class LoginViewModel @Inject constructor(private val loginUseCase: LoginUseCase)
             
             when (val result = loginUseCase(email = email.value, password = password.value)) {
                 is Result.Success -> {
+                    userPreferencesManager.saveUserEmail(email.value)
                     onSuccess()
                 }
                 is Result.Error -> {

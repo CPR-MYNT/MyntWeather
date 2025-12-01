@@ -8,12 +8,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -21,16 +16,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.perennial.weather.ui.home.component.BottomNavigationBar
 import com.perennial.weather.utils.AppLocationManager
 import com.perennial.weather.utils.ErrorConstant
 
@@ -38,7 +30,7 @@ private const val DEFAULT_COORDINATE = 0.00
 
 @Composable
 fun HomeScreen(
-    homeViewModel: HomeViewModel = hiltViewModel(),
+    homeViewModel: HomeViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val bottomNavController = rememberNavController()
@@ -122,35 +114,6 @@ fun HomeScreen(
                 homeViewModel = homeViewModel,
                 onRequestLocation = handleLocationRequest,
                 onRefresh = handleRefresh
-            )
-        }
-    }
-}
-
-@Composable
-private fun BottomNavigationBar(navController: NavHostController) {
-    NavigationBar {
-        val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
-        listOf(
-            BottomNavItem.CurrentWeather,
-            BottomNavItem.WeatherHistory
-        ).forEach { item ->
-            NavigationBarItem(
-                selected = currentRoute == item.route,
-                onClick = {
-                    navController.navigate(item.route) {
-                        popUpTo(BottomNavItem.CurrentWeather.route) { inclusive = false }
-                        launchSingleTop = true
-                    }
-                },
-                icon = {
-                    Icon(
-                        painter = painterResource(id = item.icon),
-                        contentDescription = item.label,
-                        modifier = Modifier.size(18.dp)
-                    )
-                },
-                label = { Text(item.label) }
             )
         }
     }

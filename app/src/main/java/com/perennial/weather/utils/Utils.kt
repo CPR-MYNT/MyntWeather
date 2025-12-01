@@ -19,6 +19,4 @@ object Utils {
         sdf.timeZone = TimeZone.getDefault()
         return sdf.format(Date(timestamp * 1000L))
     }
-
-
 }

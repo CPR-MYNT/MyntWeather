@@ -26,10 +26,7 @@ fun HomeNavGraph(
             )
         }
         composable(BottomNavItem.WeatherHistory.route){
-            WeatherHistoryScreen(
-                navHostController = navHostController,
-                homeViewModel = homeViewModel
-            )
+            WeatherHistoryScreen()
         }
 
     }

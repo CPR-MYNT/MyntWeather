@@ -16,7 +16,7 @@ class WeatherRepositoryImpl @Inject constructor(
     private val weatherDao: WeatherDao,
 ) : WeatherRepository{
 
-    override suspend fun fetchAndSaveWeather(lat: Double, lon: Double) {
+    override suspend fun fetchAndSaveWeather(lat: Double, lon: Double, userEmail: String) {
         val response = api.getWeather(lat, lon, apiKey = BuildConfig.OPEN_WEATHER_API_KEY)
 
         val main = response.main
@@ -31,7 +31,8 @@ class WeatherRepositoryImpl @Inject constructor(
             sunset = response.sys.sunset.toLong(),
             condition = condition,
             icon = icon,
-            createdAt = System.currentTimeMillis()
+            createdAt = System.currentTimeMillis(),
+            userEmail = userEmail
         )
 
         weatherDao.insertWeather(data)
@@ -39,5 +40,6 @@ class WeatherRepositoryImpl @Inject constructor(
 
     override suspend fun getLatestWeather(): WeatherEntity? = weatherDao.getLatestWeather()
     override fun getWeatherHistory(): Flow<List<WeatherEntity>> = weatherDao.getWeatherHistory()
+    override fun getWeatherHistoryByEmail(email: String): Flow<List<WeatherEntity>> = weatherDao.getWeatherHistoryByEmail(email)
 
 }

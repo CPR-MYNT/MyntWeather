@@ -1,5 +1,6 @@
 package com.perennial.weather.ui.home.currentweather
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -120,7 +121,8 @@ private fun ShowErrorDialogs(
 @Composable
 private fun LoadingState() {
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize()
+            .background(Color.LightGray),
         contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator()
@@ -146,7 +148,10 @@ private fun WeatherContent(
 
         AppSpacer(16.dp)
 
-        WeatherIcon(weather.icon)
+        WeatherIcon(
+            weather.icon,
+            modifier = Modifier.size(120.dp)
+        )
 
         AppSpacer(16.dp)
 

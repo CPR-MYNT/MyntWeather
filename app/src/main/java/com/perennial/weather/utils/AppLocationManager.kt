@@ -6,6 +6,7 @@ import android.location.LocationManager
 import android.os.Handler
 import android.os.Looper
 import androidx.activity.result.ActivityResultLauncher
+import androidx.annotation.RequiresPermission
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -36,6 +37,7 @@ class AppLocationManager(
     }
 
 
+    @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     fun getCurrentLocation(
         onSuccess: (latitude: Double, longitude: Double) -> Unit,
         onFailure: (String) -> Unit
@@ -51,6 +53,7 @@ class AppLocationManager(
         }
     }
 
+    @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     private fun requestFreshLocation(
         onSuccess: (latitude: Double, longitude: Double) -> Unit,
         onFailure: (String) -> Unit

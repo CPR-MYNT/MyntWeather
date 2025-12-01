@@ -20,7 +20,10 @@ fun AppSpacer(height: Dp) {
 }
 
 @Composable
-fun WeatherIcon(iconCode: String) {
+fun WeatherIcon(
+    iconCode: String,
+    modifier: Modifier = Modifier.size(80.dp)
+){
 
     val iconUrl = "https://openweathermap.org/img/wn/${iconCode}@2x.png"
     AsyncImage(
@@ -31,6 +34,6 @@ fun WeatherIcon(iconCode: String) {
         contentDescription = Constant.WEATHER_ICON,
         placeholder = painterResource(R.drawable.load),
         error = painterResource(R.drawable.load),
-        modifier = Modifier.size(80.dp)
+        modifier = modifier
     )
 }

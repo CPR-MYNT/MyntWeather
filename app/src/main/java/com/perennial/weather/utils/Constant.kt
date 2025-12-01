@@ -18,4 +18,5 @@ object Constant {
     const val SUNSET: String = "Sunset"
     const val CELSIUS: String = "°C"
     const val UNKNOWN: String = "Unknown"
+    const val NO_WEATHER_HISTORY: String = "No weather history available"
 }

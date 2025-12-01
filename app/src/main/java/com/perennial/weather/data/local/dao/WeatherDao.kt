@@ -18,4 +18,7 @@ interface WeatherDao {
 
     @Query("SELECT * FROM weather ORDER BY createdAt DESC")
     fun getWeatherHistory(): Flow<List<WeatherEntity>>
+
+    @Query("SELECT * FROM weather WHERE userEmail = :email ORDER BY createdAt DESC")
+    fun getWeatherHistoryByEmail(email: String): Flow<List<WeatherEntity>>
 }

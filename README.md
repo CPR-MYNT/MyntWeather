@@ -149,12 +149,20 @@ The project includes comprehensive unit tests covering:
 - Data validation
 
 ### Test Coverage Screenshots
+<img width="795" height="956" alt="Screenshot 2025-12-02 124724" src="https://github.com/user-attachments/assets/a10b3d3b-fb5b-4c69-a32c-cd0edc310c79" />
 
-<!-- Test coverage screenshots -->
 
 ### App Screenshots
+<img width="324" height="620" alt="Screenshot_20251202_143136" src="https://github.com/user-attachments/assets/4a0cdf3b-0dad-4162-b787-b787d1acb59f" />
 
-<!-- App screenshots  -->
+<img width="324" height="620" alt="Screenshot_20251202_131315" src="https://github.com/user-attachments/assets/c77f08d3-c77a-47eb-8963-59c6f4aeed9a" />
+
+<img width="324" height="620" alt="Screenshot_20251202_131445" src="https://github.com/user-attachments/assets/572c77d7-5c9b-45c8-8f64-9e5ab66ef2f0" />
+
+<img width="324" height="620" alt="Screenshot_20251202_131513" src="https://github.com/user-attachments/assets/6b5b8ec0-61c2-47b5-9fee-3950fe58564e" />
+
+<img width="324" height="620" alt="Screenshot_20251202_131529" src="https://github.com/user-attachments/assets/826da16b-ff3a-4731-b95e-e1829d42d324" />
+
 
 ## Project Structure
 
